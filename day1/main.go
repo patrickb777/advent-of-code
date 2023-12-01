@@ -8,6 +8,7 @@ import (
 	"os"
 	"regexp"
 	"strconv"
+	"time"
 )
 
 type Coordinates struct {
@@ -16,6 +17,7 @@ type Coordinates struct {
 }
 
 func main() {
+	start := time.Now()
 	fmt.Println("Trebuchet")
 	f := flag.String("f", "none", "Input file")
 	flag.Parse()
@@ -25,7 +27,9 @@ func main() {
 	for _, c := range coord.Coord {
 		total = total + c
 	}
-	fmt.Println(total)
+	fmt.Printf("Result: %d\n", total)
+	elapsed := time.Since(start)
+	log.Printf("Execution time %s\n", elapsed)
 }
 
 func readFile(file string) Coordinates {
