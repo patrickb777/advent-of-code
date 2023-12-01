@@ -50,8 +50,8 @@ func readFile(file string) Calibrations {
 }
 
 func getCalibrationNum(c Calibrations) Calibrations {
-	// Overlapping strings are causing a problem, Golang doesn't support look aheads (?=()), potential string overlaps to handle
-	// The following cleans the inputs of overlapping strings by replacing the values
+	// Overlapping strings are causing a problem with my regex approach, Golang doesn't support look aheads (?=()) that would identiy these
+	// The following cleans the inputs of overlapping strings, it's pretty dirty and honestly a hack to solve the puzzle
 	regex := regexp.MustCompile("(?:zerone|oneight|twone|threeight|fiveight|eightwo|eighthree|nineight)")
 	overlaps := map[string]string{
 		"zerone":    "zeroone",
