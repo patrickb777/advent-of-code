@@ -46,7 +46,7 @@ func readFile(file string) Coordinates {
 }
 
 func getCoord(c Coordinates) Coordinates {
-	re := regexp.MustCompile("(?:zero|one|two|three|four|five|six|seven|eight|nine|[0-9])") // overlapping strings are causing a problem, Golang doesn't support ?=
+	re := regexp.MustCompile("(?:zero|one|two|three|four|five|six|seven|eight|nine|[0-9])") // overlapping strings are causing a problem, Golang doesn't support look aheads (?=())
 	nConv := map[string]string{
 		"zero":  "0",
 		"one":   "1",
