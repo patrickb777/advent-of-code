@@ -16,7 +16,7 @@ type Coordinates struct {
 }
 
 func main() {
-	fmt.Println("Advent of Code Day 1 - Coordinates pt 1")
+	fmt.Println("Trebuchet")
 	f := flag.String("f", "none", "Input file")
 	flag.Parse()
 	coordinates := readFile(*f)
