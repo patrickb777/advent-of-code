@@ -11,9 +11,9 @@ import (
 	"time"
 )
 
-type Coordinates struct {
-	Input []string
-	Coord []int
+type Calibrations struct {
+	Input          []string
+	CalibrationNum []int
 }
 
 func main() {
@@ -21,24 +21,24 @@ func main() {
 	fmt.Println("Trebuchet pt2")
 	f := flag.String("f", "none", "Input file")
 	flag.Parse()
-	coordinates := readFile(*f)
-	coord := getCoord(coordinates)
+	Calibrations := readFile(*f)
+	CalibrationNum := getCalibrationNum(Calibrations)
 	total := 0
-	for _, c := range coord.Coord {
-		total = total + c
+	for _, val := range CalibrationNum.CalibrationNum {
+		total = total + val
 	}
 	fmt.Printf("Result: %d\n", total)
 	elapsed := time.Since(start)
 	log.Printf("Execution time %s\n", elapsed)
 }
 
-func readFile(file string) Coordinates {
+func readFile(file string) Calibrations {
 	f, err := os.Open(file)
 	if err != nil {
 		log.Fatal(err)
 	}
-	// Read each line of the file via a scanner and to the input slice of the Coordinates struct
-	c := Coordinates{}
+	// Read each line of the file via a scanner and to the input slice of the Calibrations struct
+	c := Calibrations{}
 	scanner := bufio.NewScanner(f)
 	for scanner.Scan() {
 		c.Input = append(c.Input, scanner.Text())
@@ -49,7 +49,7 @@ func readFile(file string) Coordinates {
 	return c
 }
 
-func getCoord(c Coordinates) Coordinates {
+func getCalibrationNum(c Calibrations) Calibrations {
 	// Overlapping strings are causing a problem, Golang doesn't support look aheads (?=()), potential string overlaps to handle
 	// The following cleans the inputs of overlapping strings by replacing the values
 	regex := regexp.MustCompile("(?:zerone|oneight|twone|threeight|fiveight|eightwo|eighthree|nineight)")
@@ -76,7 +76,7 @@ func getCoord(c Coordinates) Coordinates {
 	}
 	// iterate over the cleansed inputs and convert the spelt out numbers to digits
 	regex = regexp.MustCompile("(?:zero|one|two|three|four|five|six|seven|eight|nine|[0-9])")
-	nConv := map[string]string{
+	numConv := map[string]string{
 		"zero":  "0",
 		"one":   "1",
 		"two":   "2",
@@ -91,16 +91,16 @@ func getCoord(c Coordinates) Coordinates {
 	for _, input := range c.Input {
 		result := regex.FindAllString(input, -1)
 		for i, key := range result {
-			num, exists := nConv[key]
+			num, exists := numConv[key]
 			if exists {
 				result[i] = num
 			}
 		}
-		coord, err := strconv.Atoi(result[0] + result[len(result)-1])
+		CalibrationNum, err := strconv.Atoi(result[0] + result[len(result)-1])
 		if err != nil {
 			log.Fatal(err)
 		}
-		c.Coord = append(c.Coord, coord)
+		c.CalibrationNum = append(c.CalibrationNum, CalibrationNum)
 	}
 	return c
 }

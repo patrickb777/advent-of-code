@@ -11,9 +11,9 @@ import (
 	"time"
 )
 
-type Coordinates struct {
-	Input []string
-	Coord []int
+type Calibrations struct {
+	Input          []string
+	CalibrationNum []int
 }
 
 func main() {
@@ -21,24 +21,24 @@ func main() {
 	fmt.Println("Trebuchet")
 	f := flag.String("f", "none", "Input file")
 	flag.Parse()
-	coordinates := readFile(*f)
-	coord := getCoord(coordinates)
+	Calibrations := readFile(*f)
+	calibrations := getCalibrationNums(Calibrations)
 	total := 0
-	for _, c := range coord.Coord {
-		total = total + c
+	for _, caliNum := range calibrations.CalibrationNum {
+		total = total + caliNum
 	}
 	fmt.Printf("Result: %d\n", total)
 	elapsed := time.Since(start)
 	log.Printf("Execution time %s\n", elapsed)
 }
 
-func readFile(file string) Coordinates {
+func readFile(file string) Calibrations {
 	f, err := os.Open(file)
 	if err != nil {
 		log.Fatal(err)
 	}
-	// Read each line of the file via a scanner and to the input slice of the Coordinates struct
-	c := Coordinates{}
+	// Read each line of the file via a scanner and to the input slice of the Calibrations struct
+	c := Calibrations{}
 	scanner := bufio.NewScanner(f)
 	for scanner.Scan() {
 		c.Input = append(c.Input, scanner.Text())
@@ -49,15 +49,15 @@ func readFile(file string) Coordinates {
 	return c
 }
 
-func getCoord(c Coordinates) Coordinates {
+func getCalibrationNums(c Calibrations) Calibrations {
 	re := regexp.MustCompile("[0-9]")
-	for _, v := range c.Input {
-		s := re.FindAllString(v, -1)
-		coord, err := strconv.Atoi(s[0] + s[len(s)-1])
+	for _, input := range c.Input {
+		result := re.FindAllString(input, -1)
+		val, err := strconv.Atoi(result[0] + result[len(result)-1])
 		if err != nil {
 			log.Fatal(err)
 		}
-		c.Coord = append(c.Coord, coord)
+		c.CalibrationNum = append(c.CalibrationNum, val)
 	}
 	return c
 }
