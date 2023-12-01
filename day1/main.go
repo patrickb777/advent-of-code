@@ -22,10 +22,10 @@ func main() {
 	f := flag.String("f", "none", "Input file")
 	flag.Parse()
 	Calibrations := readFile(*f)
-	calibrations := getCalibrationNums(Calibrations)
+	calibrations := getCalibrationNum(Calibrations)
 	total := 0
-	for _, caliNum := range calibrations.CalibrationNum {
-		total = total + caliNum
+	for _, val := range calibrations.CalibrationNum {
+		total = total + val
 	}
 	fmt.Printf("Result: %d\n", total)
 	elapsed := time.Since(start)
@@ -49,7 +49,7 @@ func readFile(file string) Calibrations {
 	return c
 }
 
-func getCalibrationNums(c Calibrations) Calibrations {
+func getCalibrationNum(c Calibrations) Calibrations {
 	re := regexp.MustCompile("[0-9]")
 	for _, input := range c.Input {
 		result := re.FindAllString(input, -1)
