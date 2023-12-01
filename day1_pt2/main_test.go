@@ -12,9 +12,9 @@ func TestReadfile(t *testing.T) {
 
 // Test coordinate extraction
 func TestGetCoord(t *testing.T) {
-	c := Coordinates{Input: []string{"1abc2", "pqr3stu8vwx", "a1b2c3d4e5f", "treb7uchet"}}
+	c := Coordinates{Input: []string{"shrzvdcghblt21", "sixdddkcqjdnzzrgfourxjtwosevenhg9", "threevt1onegxgvc9flk", "7dmqzksnlcpbsqkzqlfour1four"}}
 	coord := getCoord(c)
-	if coord.Coord[2] != 15 {
-		t.Errorf("Coordinate extraction incorrect, got: %d, want: %d.", coord.Coord[2], 15)
+	if coord.Coord[2] != 39 {
+		t.Errorf("Coordinate extraction incorrect, got: %d, want: %d.", coord.Coord[2], 39)
 	}
 }
