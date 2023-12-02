@@ -1,0 +1,21 @@
+game := Game {
+    GameID: 1
+	CubeSets: CubeSet{
+				[
+				 {index: 1
+				  Cubes: Cubes{
+					       Blue: 1
+					       Green: 1
+					       Red: 1
+				         }
+				 }
+				 {index: 2
+					Cubes: Cubes{
+							 Blue: 1
+							 Green: 1
+							 Red: 1
+						   }
+				   }
+				]
+	}
+}
