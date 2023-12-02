@@ -42,11 +42,6 @@ func main() {
 	InputFile := readFile(*f)
 	games := getGameStats(InputFile)
 	total := sumOfPowers(games)
-
-	for i, _ := range games.GameID {
-		fmt.Printf("Game Number: %d, Cube Sets: %v, Min Cube Set: %v, Power of Min Cube Set: %d\n", games.GameID[i], games.CubeSet[i], games.MinCubeSet[i], games.MinPower[i])
-	}
-
 	fmt.Printf("Sum of Powers = %d\n", total)
 
 	// Output execution time
