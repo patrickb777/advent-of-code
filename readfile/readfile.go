@@ -21,7 +21,7 @@ func readFile(file string) InputFile {
 	input := InputFile{}
 	scanner := bufio.NewScanner(f)
 	for scanner.Scan() {
-		input.InputRow = append(i.InputRow, scanner.Text())
+		input.InputRow = append(input.InputRow, scanner.Text())
 	}
 	if err := scanner.Err(); err != nil {
 		log.Fatal(err)
