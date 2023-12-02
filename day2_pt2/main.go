@@ -135,7 +135,7 @@ func getColours(cubes []string) (int, int, int) {
 	return blues, greens, reds
 }
 
-// Move this to an external module
+// Need to move this to an external module for re-use in future puzzles
 func readFile(file string) InputFile {
 	f, err := os.Open(file)
 	if err != nil {
