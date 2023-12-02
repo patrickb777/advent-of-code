@@ -18,13 +18,13 @@ func readFile(file string) InputFile {
 		log.Fatal(err)
 	}
 	// Scan each line of input file with scanner and append to InputFile struct
-	i := InputFile{}
+	input := InputFile{}
 	scanner := bufio.NewScanner(f)
 	for scanner.Scan() {
-		i.InputRow = append(i.InputRow, scanner.Text())
+		input.InputRow = append(i.InputRow, scanner.Text())
 	}
 	if err := scanner.Err(); err != nil {
 		log.Fatal(err)
 	}
-	return i
+	return input
 }
