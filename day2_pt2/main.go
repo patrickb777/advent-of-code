@@ -17,9 +17,11 @@ type InputFile struct {
 }
 
 type Game struct {
-	GameID   []int
-	CubeSet  [][]Cubes
-	Possible []bool
+	GameID     []int
+	CubeSet    [][]Cubes
+	MinCubeSet []Cubes
+	MinPower   []int
+	Possible   []bool
 }
 
 type Cubes struct {
@@ -39,23 +41,23 @@ func main() {
 	flag.Parse()
 	InputFile := readFile(*f)
 	games := getGameStats(InputFile)
+	total := sumOfPowers(games)
+
 	for i, _ := range games.GameID {
-		fmt.Printf("Game Number: %d, Cube Sets: %v, Possible: %v\n", games.GameID[i], games.CubeSet[i], games.Possible[i])
+		fmt.Printf("Game Number: %d, Cube Sets: %v, Min Cube Set: %v, Power of Min Cube Set: %d\n", games.GameID[i], games.CubeSet[i], games.MinCubeSet[i], games.MinPower[i])
 	}
-	total := sumOfPossibles(games)
-	fmt.Printf("Sum of Possibles = %d\n", total)
+
+	fmt.Printf("Sum of Powers = %d\n", total)
 
 	// Output execution time
 	elapsed := time.Since(start)
 	log.Printf("Execution time %s\n", elapsed)
 }
 
-func sumOfPossibles(g Game) int {
+func sumOfPowers(g Game) int {
 	total := 0
 	for i, _ := range g.GameID {
-		if g.Possible[i] == true {
-			total = total + g.GameID[i]
-		}
+		total = total + g.MinPower[i]
 	}
 	return total
 }
@@ -64,6 +66,7 @@ func getGameStats(inputs InputFile) Game {
 	game := Game{}
 	regex := regexp.MustCompile(`\d+`)
 	for _, row := range inputs.InputRow {
+
 		// Extract game number
 		g := strings.Split(row, ":")
 		result := regex.FindAllString(g[0], -1)
@@ -71,10 +74,12 @@ func getGameStats(inputs InputFile) Game {
 		if err != nil {
 			log.Fatal(err)
 		}
+
 		// Extract game stats
 		revealCubes := strings.Split(g[1], ";")
 		c := []Cubes{}
 		p := true
+		m := Cubes{Blue: 0, Green: 0, Red: 0}
 		for _, reveal := range revealCubes {
 			cubes := strings.Split(reveal, ",")
 			blues, greens, reds := getColours(cubes)
@@ -82,9 +87,30 @@ func getGameStats(inputs InputFile) Game {
 			if blues > BlueCubes || greens > GreenCubes || reds > RedCubes {
 				p = false
 			}
+
+			// Calculate minimum cube set
+			if blues != 0 {
+				if m.Blue == 0 || blues > m.Blue {
+					m.Blue = blues
+				}
+			}
+			if greens != 0 {
+				if m.Green == 0 || greens > m.Green {
+					m.Green = greens
+				}
+			}
+			if reds != 0 {
+				if m.Red == 0 || reds > m.Red {
+					m.Red = reds
+				}
+			}
 		}
+
+		// Finalise game stats
 		game.GameID = append(game.GameID, id)
 		game.CubeSet = append(game.CubeSet, c)
+		game.MinCubeSet = append(game.MinCubeSet, m)
+		game.MinPower = append(game.MinPower, m.Blue*m.Green*m.Red)
 		game.Possible = append(game.Possible, p)
 	}
 	return game
