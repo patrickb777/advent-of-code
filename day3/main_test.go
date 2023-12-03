@@ -39,3 +39,22 @@ func TestFullResult3(t *testing.T) {
 		t.Errorf("Sum of parts calculation incorrect, got: %d, want: %d.", total, 925)
 	}
 }
+func TestFullResult4(t *testing.T) {
+	inputFile := readfile.ReadFile("engine-test-4.txt")
+	symbols, numbers := parseSchematic(inputFile)
+	partNos := getPartNumbers(symbols, numbers)
+	total := getSumOfParts(partNos)
+	if total != 8082 {
+		t.Errorf("Sum of parts calculation incorrect, got: %d, want: %d.", total, 8082)
+	}
+}
+
+func TestFullResult5(t *testing.T) {
+	inputFile := readfile.ReadFile("engine-test-5.txt")
+	symbols, numbers := parseSchematic(inputFile)
+	partNos := getPartNumbers(symbols, numbers)
+	total := getSumOfParts(partNos)
+	if total != 1447 {
+		t.Errorf("Sum of parts calculation incorrect, got: %d, want: %d.", total, 1447)
+	}
+}
