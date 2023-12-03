@@ -1,4 +1,4 @@
-module advent-of-code/day3
+module advent-of-code/gearratios
 
 go 1.21.1
 

@@ -40,22 +40,26 @@ type SymMetadata struct {
 
 func main() {
 	start := time.Now()
-	total := 0
-	fmt.Println("Day3")
+	fmt.Println("Gear Ratios")
 	f := flag.String("f", "none", "Input file")
 	flag.Parse()
 	inputFile := readfile.ReadFile(*f) // moved the reading of the input file to an external module
 	symbols, numbers := parseSchematic(inputFile)
 	partNos := getPartNumbers(symbols, numbers)
-	for _, n := range partNos.PartNo {
-		total = total + n
-	}
+	total := getSumOfParts(partNos)
 	fmt.Printf("Sum of Part Numbers = %d\n", total)
-	fmt.Println(partNos.PartNo)
 
 	// Output execution time
 	elapsed := time.Since(start)
 	log.Printf("Execution time %s\n", elapsed)
+}
+
+func getSumOfParts(partNos PartNumbers) int {
+	total := 0
+	for _, n := range partNos.PartNo {
+		total = total + n
+	}
+	return total
 }
 
 func parseSchematic(input readfile.InputFile) (Symbols, Numbers) {
@@ -99,7 +103,7 @@ func getPartNumbers(s Symbols, n Numbers) PartNumbers {
 		//fmt.Printf("Number:%s:, Length:%d, Postion:%d-%d, X Range:%d:%d, Y Range:%d:%d \n", nmd.Num, nmd.Len, nmd.Pos, nmd.Row, nmd.ProxX[0], nmd.ProxX[1], nmd.ProxY[0], nmd.ProxY[1])
 		for _, smd := range s.Metadata {
 			if smd.Row >= nmd.ProxY[0] && smd.Row <= nmd.ProxY[1] && smd.Pos >= nmd.ProxX[0] && smd.Pos <= nmd.ProxX[1] {
-				fmt.Printf("R: %d, N:%s is in Proximity of Symbol:%s \n", nmd.Row, nmd.Num, smd.Char)
+				//fmt.Printf("R: %d, N:%s is in Proximity of Symbol:%s \n", nmd.Row, nmd.Num, smd.Char)
 				p, err := strconv.Atoi(nmd.Num)
 				if err != nil {
 					log.Fatal(err)
