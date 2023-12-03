@@ -103,7 +103,7 @@ func getPartNumbers(s Symbols, n Numbers) PartNumbers {
 		//fmt.Printf("Number:%s:, Length:%d, Postion:%d-%d, X Range:%d:%d, Y Range:%d:%d \n", nmd.Num, nmd.Len, nmd.Pos, nmd.Row, nmd.ProxX[0], nmd.ProxX[1], nmd.ProxY[0], nmd.ProxY[1])
 		for _, smd := range s.Metadata {
 			if smd.Row >= nmd.ProxY[0] && smd.Row <= nmd.ProxY[1] && smd.Pos >= nmd.ProxX[0] && smd.Pos <= nmd.ProxX[1] {
-				log.Printf("R: %d, N:%s is in Proximity of Symbol:%s \n", nmd.Row, nmd.Num, smd.Char)
+				log.Printf("R:%d, N:%s, Proximity of S:%s \n", nmd.Row, nmd.Num, smd.Char)
 				p, err := strconv.Atoi(nmd.Num)
 				if err != nil {
 					log.Fatal(err)
