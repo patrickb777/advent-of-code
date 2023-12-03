@@ -12,7 +12,7 @@ type InputFile struct {
 	InputRow []string
 }
 
-func readFile(file string) InputFile {
+func ReadFile(file string) InputFile {
 	f, err := os.Open(file)
 	if err != nil {
 		log.Fatal(err)
