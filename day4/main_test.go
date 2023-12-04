@@ -6,19 +6,24 @@ import (
 )
 
 func TestReadfile(t *testing.T) {
-	inputFile := readfile.ReadFile("scratchcard-test-1.txt")
+	inputFile := readfile.ReadFile("scratchcard_test_input.txt")
 	if len(inputFile.InputRow) != 6 {
 		t.Errorf("Read of input file was incorrect, got: %d, want: %d.", len(inputFile.InputRow), 6)
 	}
 }
 
-// func TestFullResult1(t *testing.T) {
-// 	fmt.Printf("\nTestcase 1")
-// 	inputFile := readfile.ReadFile("engine-test-1.txt")
-// 	symbols, numbers := parseSchematic(inputFile)
-// 	partNos := getPartNumbers(symbols, numbers)
-// 	total := getSumOfParts(partNos)
-// 	if total != 4361 {
-// 		t.Errorf("Sum of parts calculation incorrect, got: %d, want: %d.", total, 4361)
-// 	}
-// }
+func TestFullResult1(t *testing.T) {
+	inputFile := readfile.ReadFile("scratchcard_test_1.txt")
+	worth := parseScratchcard(inputFile.InputRow[0])
+	if worth != 8 {
+		t.Errorf("Scratchcard worth incorrectly calculated, got: %d, want: %d.", worth, 8)
+	}
+}
+
+func TestFullResult2(t *testing.T) {
+	inputFile := readfile.ReadFile("scratchcard_test_2.txt")
+	worth := parseScratchcard(inputFile.InputRow[0])
+	if worth != 0 {
+		t.Errorf("Scratchcard worth incorrectly calculated,  got: %d, want: %d.", worth, 0)
+	}
+}
