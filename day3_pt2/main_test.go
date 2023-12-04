@@ -12,13 +12,15 @@ func TestReadfile(t *testing.T) {
 	}
 }
 
+// test cases need updating
+
 func TestFullResult1(t *testing.T) {
 	inputFile := readfile.ReadFile("engine-test-1.txt")
 	symbols, numbers := parseSchematic(inputFile)
 	partNos := getPartNumbers(symbols, numbers)
 	total := getSumOfParts(partNos)
-	if total != 4361 {
-		t.Errorf("Sum of parts calculation incorrect, got: %d, want: %d.", total, 4361)
+	if total != 467835 {
+		t.Errorf("Gear Ratios error: %d, want: %d.", total, 467835)
 	}
 }
 
@@ -27,8 +29,8 @@ func TestFullResult2(t *testing.T) {
 	symbols, numbers := parseSchematic(inputFile)
 	partNos := getPartNumbers(symbols, numbers)
 	total := getSumOfParts(partNos)
-	if total != 413 {
-		t.Errorf("Sum of parts calculation incorrect, got: %d, want: %d.", total, 413)
+	if total != 0 {
+		t.Errorf("Gear Ratios error: %d, want: %d.", total, 0)
 	}
 }
 
@@ -37,27 +39,7 @@ func TestFullResult3(t *testing.T) {
 	symbols, numbers := parseSchematic(inputFile)
 	partNos := getPartNumbers(symbols, numbers)
 	total := getSumOfParts(partNos)
-	if total != 925 {
-		t.Errorf("Sum of parts calculation incorrect, got: %d, want: %d.", total, 925)
-	}
-}
-
-func TestFullResult4(t *testing.T) {
-	inputFile := readfile.ReadFile("engine-test-4.txt")
-	symbols, numbers := parseSchematic(inputFile)
-	partNos := getPartNumbers(symbols, numbers)
-	total := getSumOfParts(partNos)
-	if total != 8082 {
-		t.Errorf("Sum of parts calculation incorrect, got: %d, want: %d.", total, 8082)
-	}
-}
-
-func TestFullResult5(t *testing.T) {
-	inputFile := readfile.ReadFile("engine-test-5.txt")
-	symbols, numbers := parseSchematic(inputFile)
-	partNos := getPartNumbers(symbols, numbers)
-	total := getSumOfParts(partNos)
-	if total != 1931 {
-		t.Errorf("Sum of parts calculation incorrect, got: %d, want: %d.", total, 1931)
+	if total != 0 {
+		t.Errorf("Gear Ratios error: %d, want: %d.", total, 0)
 	}
 }
