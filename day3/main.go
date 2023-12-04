@@ -7,7 +7,6 @@ import (
 	"log"
 	"regexp"
 	"strconv"
-	"strings"
 	"time"
 )
 
@@ -85,7 +84,22 @@ func parseSchematic(input readfile.InputFile) (Symbols, Numbers) {
 		for _, n := range num {
 			numMetadata.Num = n
 			numMetadata.Len = len(n)
-			numMetadata.Pos = strings.Index(v, n)
+			//numMetadata.Pos = strings.Index(v, n) // this doesn't work
+			nRX := regexp.MustCompile(n)
+			posIndex := nRX.FindAllStringSubmatchIndex(v, -1)
+			//fmt.Printf("Number:%s, Regex Match:%s, Regex Index:%v, String Index:%d   \n", numMetadata.Num, test, test2, numMetadata.Pos)
+			for _, ind := range posIndex {
+				str := v[ind[0]:]
+				res := numRX.FindString(str)
+				//fmt.Printf("%s  \n", test3)
+				//fmt.Printf("%s  \n", test4)
+				if res == numMetadata.Num {
+					//fmt.Printf("Match @ %d <<>> Pos %d \n", val[0], numMetadata.Pos)
+					numMetadata.Pos = ind[0]
+				} // else {
+				// 	fmt.Println("No Match")
+				// }
+			}
 			numMetadata.Row = r
 			numMetadata.ProxX[0] = numMetadata.Pos - 1
 			numMetadata.ProxX[1] = numMetadata.Pos + numMetadata.Len
@@ -100,10 +114,10 @@ func parseSchematic(input readfile.InputFile) (Symbols, Numbers) {
 func getPartNumbers(s Symbols, n Numbers) PartNumbers {
 	var partNos PartNumbers
 	for _, nmd := range n.Metadata {
-		//fmt.Printf("Number:%s:, Length:%d, Postion:%d-%d, X Range:%d:%d, Y Range:%d:%d \n", nmd.Num, nmd.Len, nmd.Pos, nmd.Row, nmd.ProxX[0], nmd.ProxX[1], nmd.ProxY[0], nmd.ProxY[1])
+		//fmt.Printf("Number:%s:, Length:%d, Postion:%d, X Range:%d:%d, Y Range:%d:%d \n", nmd.Num, nmd.Len, nmd.Pos, nmd.ProxX[0], nmd.ProxX[1], nmd.ProxY[0], nmd.ProxY[1])
 		for _, smd := range s.Metadata {
 			if smd.Row >= nmd.ProxY[0] && smd.Row <= nmd.ProxY[1] && smd.Pos >= nmd.ProxX[0] && smd.Pos <= nmd.ProxX[1] {
-				log.Printf("R:%d, N:%s, Proximity of S:%s \n", nmd.Row, nmd.Num, smd.Char)
+				//log.Printf("R:%d, N:%s, Proximity of S:%s \n", nmd.Row, nmd.Num, smd.Char)
 				p, err := strconv.Atoi(nmd.Num)
 				if err != nil {
 					log.Fatal(err)
