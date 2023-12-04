@@ -80,3 +80,13 @@ func TestFullResult5(t *testing.T) {
 		t.Errorf("Sum of parts calculation incorrect, got: %d, want: %d.", total, 1931)
 	}
 }
+
+func TestFullResult6(t *testing.T) {
+	inputFile := readfile.ReadFile("engine-test-6.txt")
+	symbols, numbers := parseSchematic(inputFile)
+	partNos := getPartNumbers(symbols, numbers)
+	total := getSumOfParts(partNos)
+	if total != 7623 {
+		t.Errorf("Sum of parts calculation incorrect, got: %d, want: %d.", total, 7623)
+	}
+}

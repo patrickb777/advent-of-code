@@ -68,8 +68,8 @@ func parseSchematic(input readfile.InputFile) (Symbols, Numbers) {
 	numbers := Numbers{}
 	symRX := regexp.MustCompile(`[^a-zA-Z0-9\.]`)
 	numRX := regexp.MustCompile(`[0-9]+`)
-
 	for r, v := range input.InputRow {
+		// Find Symbols and Positions
 		runes := []rune(v)
 		for p, c := range runes {
 			sym := symRX.FindAllString(string(c), -1)
@@ -80,27 +80,17 @@ func parseSchematic(input readfile.InputFile) (Symbols, Numbers) {
 				symbols.Metadata = append(symbols.Metadata, symMetadata)
 			}
 		}
+		// Find Numbers and Positions
 		num := numRX.FindAllString(v, -1)
-		for _, n := range num {
+		numInd := numRX.FindAllStringIndex(v, -1)
+		//fmt.Println(v)
+		for i, n := range num {
 			numMetadata.Num = n
+			//fmt.Printf("Number:%s <<>> %s \n", numMetadata.Num, num[i])
+			//fmt.Printf("Number Index:%v \n", numInd[i][0])
 			numMetadata.Len = len(n)
-			//numMetadata.Pos = strings.Index(v, n) // this doesn't work
-			nRX := regexp.MustCompile(n)
-			posIndex := nRX.FindAllStringSubmatchIndex(v, -1)
-			//fmt.Printf("Number:%s, Regex Match:%s, Regex Index:%v, String Index:%d   \n", numMetadata.Num, test, test2, numMetadata.Pos)
-			for _, ind := range posIndex {
-				str := v[ind[0]:]
-				res := numRX.FindString(str)
-				//fmt.Printf("%s  \n", test3)
-				//fmt.Printf("%s  \n", test4)
-				if res == numMetadata.Num {
-					//fmt.Printf("Match @ %d <<>> Pos %d \n", val[0], numMetadata.Pos)
-					numMetadata.Pos = ind[0]
-				} // else {
-				// 	fmt.Println("No Match")
-				// }
-			}
 			numMetadata.Row = r
+			numMetadata.Pos = numInd[i][0]
 			numMetadata.ProxX[0] = numMetadata.Pos - 1
 			numMetadata.ProxX[1] = numMetadata.Pos + numMetadata.Len
 			numMetadata.ProxY[0] = r - 1
