@@ -52,7 +52,7 @@ func TestFullResult4(t *testing.T) {
 	}
 }
 func TestFullResult41(t *testing.T) {
-	inputFile := readfile.ReadFile("engine-test-41.txt")
+	inputFile := readfile.ReadFile("engine-test-4-1.txt")
 	symbols, numbers := parseSchematic(inputFile)
 	partNos := getPartNumbers(symbols, numbers)
 	total := getSumOfParts(partNos)
@@ -62,7 +62,7 @@ func TestFullResult41(t *testing.T) {
 }
 
 func TestFullResult42(t *testing.T) {
-	inputFile := readfile.ReadFile("engine-test-42.txt")
+	inputFile := readfile.ReadFile("engine-test-4-2.txt")
 	symbols, numbers := parseSchematic(inputFile)
 	partNos := getPartNumbers(symbols, numbers)
 	total := getSumOfParts(partNos)
