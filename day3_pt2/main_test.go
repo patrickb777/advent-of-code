@@ -2,6 +2,7 @@ package main
 
 import (
 	"advent-of-code/readfile"
+	"fmt"
 	"testing"
 )
 
@@ -16,30 +17,61 @@ func TestReadfile(t *testing.T) {
 
 func TestFullResult1(t *testing.T) {
 	inputFile := readfile.ReadFile("engine-test-1.txt")
-	symbols, numbers := parseSchematic(inputFile)
-	partNos := getPartNumbers(symbols, numbers)
-	total := getSumOfParts(partNos)
+	gears, cogs := parseSchematic(inputFile)
+	cogs = getGearAttachments(gears, cogs)
+	total := calcGearRatios(gears, cogs)
 	if total != 467835 {
-		t.Errorf("Gear Ratios error: %d, want: %d.", total, 467835)
+		t.Errorf("Gear Ratios error, got: %d, want: %d.", total, 467835)
 	}
 }
 
 func TestFullResult2(t *testing.T) {
 	inputFile := readfile.ReadFile("engine-test-2.txt")
-	symbols, numbers := parseSchematic(inputFile)
-	partNos := getPartNumbers(symbols, numbers)
-	total := getSumOfParts(partNos)
-	if total != 0 {
-		t.Errorf("Gear Ratios error: %d, want: %d.", total, 0)
+	gears, cogs := parseSchematic(inputFile)
+	cogs = getGearAttachments(gears, cogs)
+	total := calcGearRatios(gears, cogs)
+	if total != 1038734 {
+		t.Errorf("Gear Ratios error, got: %d, want: %d.", total, 1038734)
 	}
 }
 
 func TestFullResult3(t *testing.T) {
 	inputFile := readfile.ReadFile("engine-test-3.txt")
-	symbols, numbers := parseSchematic(inputFile)
-	partNos := getPartNumbers(symbols, numbers)
-	total := getSumOfParts(partNos)
-	if total != 0 {
-		t.Errorf("Gear Ratios error: %d, want: %d.", total, 0)
+	gears, cogs := parseSchematic(inputFile)
+	cogs = getGearAttachments(gears, cogs)
+	total := calcGearRatios(gears, cogs)
+	if total != 3882133 {
+		t.Errorf("Gear Ratios error, got: %d, want: %d.", total, 3882133)
+	}
+}
+func TestFullResult4(t *testing.T) {
+	inputFile := readfile.ReadFile("engine-test-4.txt")
+	gears, cogs := parseSchematic(inputFile)
+	cogs = getGearAttachments(gears, cogs)
+	total := calcGearRatios(gears, cogs)
+	if total != 3340266 {
+		t.Errorf("Gear Ratios error, got: %d, want: %d.", total, 3340266)
+	}
+}
+
+func TestFullResult5(t *testing.T) {
+	fmt.Println("Test ....")
+	inputFile := readfile.ReadFile("engine-test-5.txt")
+	gears, cogs := parseSchematic(inputFile)
+	cogs = getGearAttachments(gears, cogs)
+	total := calcGearRatios(gears, cogs)
+	if total != 3384871 {
+		t.Errorf("Gear Ratios error, got: %d, want: %d.", total, 3384871)
+	}
+}
+
+func TestFullResult6(t *testing.T) {
+	fmt.Println("Test ....")
+	inputFile := readfile.ReadFile("engine-test-6.txt")
+	gears, cogs := parseSchematic(inputFile)
+	cogs = getGearAttachments(gears, cogs)
+	total := calcGearRatios(gears, cogs)
+	if total != 3848758 {
+		t.Errorf("Gear Ratios error, got: %d, want: %d.", total, 3848758)
 	}
 }

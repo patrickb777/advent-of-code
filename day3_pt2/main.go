@@ -96,7 +96,7 @@ func calcGearRatios(gears Symbols, cogs Numbers) int {
 		if gearings[k][0] > 0 && gearings[k][1] > 0 {
 			fmt.Println(k, " : ", v)
 		}
-		total = total + gearings[k][0]*gearings[k][1]
+		total = total + (gearings[k][0] * gearings[k][1])
 	}
 	return total
 }

@@ -1,0 +1,2 @@
+Gear Ratios - Part Two
+Sum of Gear Ratios = 75600259
