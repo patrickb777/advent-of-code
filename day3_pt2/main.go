@@ -12,10 +12,6 @@ import (
 	"github.com/google/uuid"
 )
 
-type Gearings struct {
-	Data map[string][2]string
-}
-
 type Numbers struct {
 	Metadata []NumMetadata
 }
