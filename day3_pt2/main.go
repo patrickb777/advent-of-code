@@ -8,6 +8,8 @@ import (
 	"regexp"
 	"strconv"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 type Gearings struct {
@@ -92,10 +94,7 @@ func calcGearRatios(gears Symbols, cogs Numbers) int {
 
 	// Calculate the Gear Ratios
 	total := 0
-	for k, v := range gearings {
-		if gearings[k][0] > 0 && gearings[k][1] > 0 {
-			fmt.Println(k, " : ", v)
-		}
+	for k := range gearings {
 		total = total + (gearings[k][0] * gearings[k][1])
 	}
 	return total
@@ -138,7 +137,8 @@ func parseSchematic(input readfile.InputFile) (Symbols, Numbers) {
 				symMetadata.ProxX[1] = symMetadata.Pos + 1
 				symMetadata.ProxY[0] = r - 1
 				symMetadata.ProxY[1] = r + 1
-				symMetadata.GID = "g-" + strconv.Itoa(r) + strconv.Itoa(p)
+				uuid := uuid.New()
+				symMetadata.GID = uuid.String()
 				symbols.Metadata = append(symbols.Metadata, symMetadata)
 			}
 		}
