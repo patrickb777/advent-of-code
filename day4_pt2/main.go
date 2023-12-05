@@ -30,37 +30,32 @@ func main() {
 
 	l := len(winnings.Cards)
 	rgx := regexp.MustCompile(`[0-9]+`)
-	for i := 0; i <= l; i++ {
+	for i := 0; i < l; i++ {
+		// fmt.Println("__ i = ", i, "l =", l)
 		wins := parseScratchcard(winnings.Cards[i])
 		//fmt.Println(winnings)
-		fmt.Println("Playing card:", winnings.Cards[i])
-		fmt.Printf("%v, wins: %d\n", winnings.Cards[i], wins)
+		//fmt.Printf("Playing card:%v, wins: %d\n", winnings.Cards[i], wins)
 		c, err := strconv.Atoi(rgx.FindString(winnings.Cards[i]))
 		if err != nil {
 			log.Fatal(err)
 		}
-		fmt.Println(c)
 		for ind := 1; ind <= wins; ind++ {
 			if wins != 0 {
 				//fmt.Println(winnings.Cards[i+ind])
 				winnings.Cards = append(winnings.Cards, inputFile.InputRow[(c-1)+ind])
-				fmt.Println("++")
+				//fmt.Println("++")
 			}
 		}
 		l = len(winnings.Cards)
 
-		for _, k := range winnings.Cards {
-			fmt.Println(k)
-		}
-		fmt.Println("__")
-		//fmt.Println("New length", l)
-		if l == 100 {
-			break
-		}
+		// for _, k := range winnings.Cards {
+		// 	fmt.Println(k)
+		// }
+		// fmt.Println("__")
 	}
 
 	// Output result
-	totalCards := 0
+	totalCards := len(winnings.Cards)
 	fmt.Printf("Total scratchcards: %d\n", totalCards)
 
 	// Output execution time
