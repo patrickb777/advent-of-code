@@ -44,7 +44,6 @@ func main() {
 	for _, s := range expSeeds {
 		locations.Loc = append(locations.Loc, getLocation(s, maps))
 	}
-	//fmt.Println(locations)
 	loc := getNearestLoc(locations.Loc)
 	fmt.Println("Closet location: ", loc)
 
