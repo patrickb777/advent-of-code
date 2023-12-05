@@ -35,7 +35,7 @@ func main() {
 	fmt.Println("The Gardener & The Almanac")
 	f := flag.String("f", "none", "Input file")
 	flag.Parse()
-	inputFile := readfile.ReadFile(*f) // moved the reading of the input file to an external module
+	inputFile := readfile.ReadFile(*f)
 
 	// Processing
 	locations := Locations{}
@@ -59,41 +59,38 @@ func getNearestLoc(locs []int) int {
 
 func getLocation(seed int, maps Maps) int {
 	loc := 0
-	// Get Soil
+	//log.Printf("Seed: %d", seed)
 	soil := mapLookup(seed, "seed-to-soil", maps)
+	//log.Printf("Soil: %d", soil)
 	fert := mapLookup(soil, "soil-to-fertilizer", maps)
+	//log.Printf("Fertilizer: %d", fert)
 	water := mapLookup(fert, "fertilizer-to-water", maps)
 	light := mapLookup(water, "water-to-light", maps)
 	temp := mapLookup(light, "light-to-temperature", maps)
 	humi := mapLookup(temp, "temperature-to-humidity", maps)
 	loc = mapLookup(humi, "humidity-to-location", maps)
-	//fmt.Println(seed, soil, fert, water, light, temp, humi, loc)
+	//log.Printf("Location: %d\n\n", loc)
+	//log.Println(seed, soil, fert, water, light, temp, humi, loc)
 	return loc
 }
 
 func mapLookup(source int, m string, maps Maps) int {
-	lookup := make(map[int]int)
+	//lookup := make(map[int]int)
 	dest := 404
 	for _, md := range maps.Mapdata {
 		switch md.Map {
 		case m:
-			// create temporary map for the source and detination range
-			cnt := 0
-			for s := md.Source; s <= md.Source+(md.Range-1); s++ {
-				//fmt.Print(m, ":", s, "..", md.Dest+cnt, " || ")
-				lookup[s] = md.Dest + cnt
-				cnt++
-				_, exists := lookup[source]
-				if exists {
-					dest = lookup[source]
-				} else {
-					dest = source
-				}
+			sourceStart := md.Source
+			sourceEnd := md.Source + (md.Range - 1)
+			if source >= sourceStart && source <= sourceEnd {
+				delta := source - md.Source
+				dest = md.Dest + delta
 			}
 		}
 	}
-	// log.Println(lookup)
-	// log.Println("Destination:", dest)
+	if dest == 404 {
+		dest = source
+	}
 	return dest
 }
 
