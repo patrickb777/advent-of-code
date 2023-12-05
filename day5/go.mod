@@ -1,4 +1,4 @@
-module advent-of-code/day5
+module advent-of-code/almanac
 
 go 1.21.4
 
