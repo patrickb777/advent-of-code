@@ -144,12 +144,10 @@ func TestSeedLocation3(t *testing.T) {
 }
 
 // Test for final result calculation
-func TestGetLowestLocation(t *testing.T) {
+func TestGetNearestLocation(t *testing.T) {
 	locations := []int{82, 43, 86, 35}
 	expectedResult := 35
-	inputFile := readfile.ReadFile("almanac_test.txt")
-	_, maps := parseAlmanac(inputFile)
-	loc := getLowest(locations)
+	loc := getNearestLoc(locations)
 	if loc != expectedResult {
 		t.Errorf("Almanac parsing did not return correct number of seeds, got: %v, want: %v.", loc, expectedResult)
 	}

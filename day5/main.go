@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"regexp"
+	"slices"
 	"strconv"
 	"strings"
 	"time"
@@ -42,11 +43,18 @@ func main() {
 	for _, s := range seeds.Seeds {
 		locations.Loc = append(locations.Loc, getLocation(s, maps))
 	}
-	fmt.Println(locations)
+	//fmt.Println(locations)
+	loc := getNearestLoc(locations.Loc)
+	fmt.Println("Closet location: ", loc)
 
 	// Output execution time
 	elapsed := time.Since(start)
 	log.Printf("Execution time %s\n", elapsed)
+}
+
+func getNearestLoc(locs []int) int {
+	loc := slices.Min(locs)
+	return loc
 }
 
 func getLocation(seed int, maps Maps) int {
