@@ -40,7 +40,8 @@ func main() {
 	// Processing
 	locations := Locations{}
 	seeds, maps := parseAlmanac(inputFile)
-	for _, s := range seeds.Seeds {
+	expSeeds := expSeedList(seeds.Seeds)
+	for _, s := range expSeeds {
 		locations.Loc = append(locations.Loc, getLocation(s, maps))
 	}
 	//fmt.Println(locations)
@@ -55,17 +56,14 @@ func main() {
 func expSeedList(seeds []int) []int {
 	var seedList []int
 	for i := 0; i < len(seeds); i++ {
-		//log.Printf("Seed: %d, Range: %d", seeds[i], seeds[i+1])
 		start := seeds[i]
 		end := start + (seeds[i+1] - 1)
-		fmt.Println(start, end)
 		for x := start; x <= end; x++ {
-			//fmt.Printf("x= %d, ", x)
 			seedList = append(seedList, x)
 		}
 		i++
 	}
-	log.Println("\nSeed List: ", seedList)
+	//log.Println(seedList)
 	return seedList
 }
 
@@ -76,23 +74,17 @@ func getNearestLoc(locs []int) int {
 
 func getLocation(seed int, maps Maps) int {
 	loc := 0
-	//log.Printf("Seed: %d", seed)
 	soil := mapLookup(seed, "seed-to-soil", maps)
-	//log.Printf("Soil: %d", soil)
 	fert := mapLookup(soil, "soil-to-fertilizer", maps)
-	//log.Printf("Fertilizer: %d", fert)
 	water := mapLookup(fert, "fertilizer-to-water", maps)
 	light := mapLookup(water, "water-to-light", maps)
 	temp := mapLookup(light, "light-to-temperature", maps)
 	humi := mapLookup(temp, "temperature-to-humidity", maps)
 	loc = mapLookup(humi, "humidity-to-location", maps)
-	//log.Printf("Location: %d\n\n", loc)
-	//log.Println(seed, soil, fert, water, light, temp, humi, loc)
 	return loc
 }
 
 func mapLookup(source int, m string, maps Maps) int {
-	//lookup := make(map[int]int)
 	dest := 404
 	for _, md := range maps.Mapdata {
 		switch md.Map {
