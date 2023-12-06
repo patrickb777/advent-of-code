@@ -8,7 +8,7 @@ import (
 // Validate input file can be opened
 func TestReadfile(t *testing.T) {
 	expectedResult := 33
-	inputFile := readfile.ReadFile("almanac_test.txt")
+	inputFile := readfile.ReadFile("almanac_test_1.txt")
 	if len(inputFile.InputRow) != expectedResult {
 		t.Errorf("Read of input file was incorrect, got: %d, want: %d.", len(inputFile.InputRow), expectedResult)
 	}
@@ -17,7 +17,7 @@ func TestReadfile(t *testing.T) {
 // Validate parsing of Seed list works correctly
 func TestParseAlmanac1(t *testing.T) {
 	expectedResult := 4
-	inputFile := readfile.ReadFile("almanac_test.txt")
+	inputFile := readfile.ReadFile("almanac_test_1.txt")
 	seeds, _ := parseAlmanac(inputFile)
 	if len(seeds.Seeds) != expectedResult {
 		t.Errorf("Almanac parsing did not return correct number of seeds, got: %d, want: %d.", len(seeds.Seeds), expectedResult)
@@ -27,7 +27,7 @@ func TestParseAlmanac1(t *testing.T) {
 // Validate parsing of Seed to Soil map works correctly
 func TestParseAlmanac2(t *testing.T) {
 	expectedResult := Mapdata{Map: "seed-to-soil", Dest: 52, Source: 50, Range: 48}
-	inputFile := readfile.ReadFile("almanac_test.txt")
+	inputFile := readfile.ReadFile("almanac_test_1.txt")
 	_, maps := parseAlmanac(inputFile)
 	if maps.Mapdata[1] != expectedResult {
 		t.Errorf("Almanac parsing did not return correct number of seeds, got: %v, want: %v.", maps.Mapdata[1], expectedResult)
@@ -37,7 +37,7 @@ func TestParseAlmanac2(t *testing.T) {
 // Validate parsing of Light to Temperature map works correctly
 func TestParseAlmanac3(t *testing.T) {
 	expectedResult := Mapdata{Map: "light-to-temperature", Dest: 68, Source: 64, Range: 13}
-	inputFile := readfile.ReadFile("almanac_test.txt")
+	inputFile := readfile.ReadFile("almanac_test_1.txt")
 	_, maps := parseAlmanac(inputFile)
 	if maps.Mapdata[13] != expectedResult {
 		t.Errorf("Almanac parsing did not return correct number of seeds, got: %v, want: %v.", maps.Mapdata[13], expectedResult)
@@ -49,7 +49,7 @@ func TestSeedSoil1(t *testing.T) {
 	seed := 98
 	m := "seed-to-soil"
 	expectedResult := 50
-	inputFile := readfile.ReadFile("almanac_test.txt")
+	inputFile := readfile.ReadFile("almanac_test_1.txt")
 	_, maps := parseAlmanac(inputFile)
 	soil := mapLookup(seed, m, maps)
 	if soil != expectedResult {
@@ -62,7 +62,7 @@ func TestSeedSoil2(t *testing.T) {
 	seed := 99
 	m := "seed-to-soil"
 	expectedResult := 51
-	inputFile := readfile.ReadFile("almanac_test.txt")
+	inputFile := readfile.ReadFile("almanac_test_1.txt")
 	_, maps := parseAlmanac(inputFile)
 	soil := mapLookup(seed, m, maps)
 	if soil != expectedResult {
@@ -75,7 +75,7 @@ func TestSeedSoil3(t *testing.T) {
 	seed := 10
 	m := "seed-to-soil"
 	expectedResult := 10
-	inputFile := readfile.ReadFile("almanac_test.txt")
+	inputFile := readfile.ReadFile("almanac_test_1.txt")
 	_, maps := parseAlmanac(inputFile)
 	soil := mapLookup(seed, m, maps)
 	if soil != expectedResult {
@@ -88,7 +88,7 @@ func TestSoilFertl1(t *testing.T) {
 	soil := 15
 	m := "soil-to-fertilizer"
 	expectedResult := 0
-	inputFile := readfile.ReadFile("almanac_test.txt")
+	inputFile := readfile.ReadFile("almanac_test_1.txt")
 	_, maps := parseAlmanac(inputFile)
 	fert := mapLookup(soil, m, maps)
 	if fert != expectedResult {
@@ -101,7 +101,7 @@ func TestSoilFertl2(t *testing.T) {
 	soil := 0
 	m := "soil-to-fertilizer"
 	expectedResult := 39
-	inputFile := readfile.ReadFile("almanac_test.txt")
+	inputFile := readfile.ReadFile("almanac_test_1.txt")
 	_, maps := parseAlmanac(inputFile)
 	fert := mapLookup(soil, m, maps)
 	if fert != expectedResult {
@@ -113,7 +113,7 @@ func TestSoilFertl2(t *testing.T) {
 func TestSeedLocation1(t *testing.T) {
 	seed := 79
 	expectedResult := 82
-	inputFile := readfile.ReadFile("almanac_test.txt")
+	inputFile := readfile.ReadFile("almanac_test_1.txt")
 	_, maps := parseAlmanac(inputFile)
 	loc := getLocation(seed, maps)
 	if loc != expectedResult {
@@ -124,7 +124,7 @@ func TestSeedLocation1(t *testing.T) {
 func TestSeedLocation2(t *testing.T) {
 	seed := 14
 	expectedResult := 43
-	inputFile := readfile.ReadFile("almanac_test.txt")
+	inputFile := readfile.ReadFile("almanac_test_1.txt")
 	_, maps := parseAlmanac(inputFile)
 	loc := getLocation(seed, maps)
 	if loc != expectedResult {
@@ -135,7 +135,7 @@ func TestSeedLocation2(t *testing.T) {
 func TestSeedLocation3(t *testing.T) {
 	seed := 55
 	expectedResult := 86
-	inputFile := readfile.ReadFile("almanac_test.txt")
+	inputFile := readfile.ReadFile("almanac_test_1.txt")
 	_, maps := parseAlmanac(inputFile)
 	loc := getLocation(seed, maps)
 	if loc != expectedResult {

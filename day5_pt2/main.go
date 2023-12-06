@@ -9,6 +9,7 @@ import (
 	"slices"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -33,6 +34,7 @@ type Mapdata struct {
 func main() {
 	start := time.Now()
 	fmt.Println("The Gardener & The Almanac - PT2")
+	log.Printf("Commencing calculations at: %v", start)
 	f := flag.String("f", "none", "Input file")
 	flag.Parse()
 	inputFile := readfile.ReadFile(*f)
@@ -41,8 +43,22 @@ func main() {
 	locations := Locations{}
 	seeds, maps := parseAlmanac(inputFile)
 	expSeeds := expSeedList(seeds.Seeds)
-	for _, s := range expSeeds {
-		locations.Loc = append(locations.Loc, getLocation(s, maps))
+	seedsTotal := len(expSeeds)
+	log.Printf("Total Number of Seeds: %d", seedsTotal)
+	u := 1000000
+	for i, s := range expSeeds {
+		loc := getLocation(s, maps)
+		if len(locations.Loc) == 0 {
+			// Store first location
+			locations.Loc = append(locations.Loc, loc)
+		} else if loc < locations.Loc[0] {
+			locations.Loc[0] = loc
+			log.Printf("New lowest location found: seed: %d @ location:  %d!", s, locations.Loc[0])
+		}
+		if i == u {
+			log.Printf("Processed %d %% of %d seeds", (i / seedsTotal * 100), seedsTotal)
+			u = u + 1000000
+		}
 	}
 	loc := getNearestLoc(locations.Loc)
 	fmt.Println("Closet location: ", loc)
@@ -53,16 +69,28 @@ func main() {
 }
 
 func expSeedList(seeds []int) []int {
+	var wg sync.WaitGroup
+	totalSeeds := len(seeds)
+	wg.Add(16)
 	var seedList []int
-	for i := 0; i < len(seeds); i++ {
-		start := seeds[i]
-		end := start + (seeds[i+1] - 1)
-		for x := start; x <= end; x++ {
-			seedList = append(seedList, x)
-		}
-		i++
+	t := 0
+	for i := 0; i < totalSeeds; i++ {
+		go func(i int) {
+			defer wg.Done()
+			t = seeds[i]
+			start := seeds[t]               // start the loop at the seed number
+			end := start + (seeds[t+1] - 1) // end the loop at the end of the range
+			for x := start; x <= end; x++ {
+				seedList = append(seedList, x)
+			}
+			fmt.Println(start, end, t)
+			t++
+		}(i)
 	}
+
+	wg.Wait()
 	//log.Println(seedList)
+	seedList = append(seedList, 1)
 	return seedList
 }
 
@@ -80,6 +108,7 @@ func getLocation(seed int, maps Maps) int {
 	temp := mapLookup(light, "light-to-temperature", maps)
 	humi := mapLookup(temp, "temperature-to-humidity", maps)
 	loc = mapLookup(humi, "humidity-to-location", maps)
+
 	return loc
 }
 
