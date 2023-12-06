@@ -14,12 +14,22 @@ func TestReadfile(t *testing.T) {
 	}
 }
 
-// Validate parsing of Seed list works correctly
-// func TestParseAlmanac1(t *testing.T) {
-// 	expectedResult := 4
-// 	inputFile := readfile.ReadFile("almanac_test.txt")
-// 	seeds, _ := parseAlmanac(inputFile)
-// 	if len(seeds.Seeds) != expectedResult {
-// 		t.Errorf("Almanac parsing did not return correct number of seeds, got: %d, want: %d.", len(seeds.Seeds), expectedResult)
-// 	}
-// }
+// Validate parsing of times
+func TestParseRaces(t *testing.T) {
+	expectedResult := 15
+	inputFile := readfile.ReadFile("races_test.txt")
+	races := parseRaces(inputFile)
+	if races.Time[1] != expectedResult {
+		t.Errorf("Parsing of Times did not return correct value, got: %d, want: %d.", races.Time[1], expectedResult)
+	}
+}
+
+// Validate parsing of distances
+func TestParseRaces2(t *testing.T) {
+	expectedResult := 200
+	inputFile := readfile.ReadFile("races_test.txt")
+	races := parseRaces(inputFile)
+	if races.Distance[2] != expectedResult {
+		t.Errorf("Parsing of Times did not return correct value, got: %d, want: %d.", races.Distance[2], expectedResult)
+	}
+}
