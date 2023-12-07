@@ -41,9 +41,8 @@ func main() {
 
 func calculateDistance(races Races) {
 	winningCombinations := 0
-	raceTime := races.Time
-	for timer := 1; timer < raceTime; timer++ {
-		result := (raceTime - timer) * timer
+	for timer := 1; timer < races.Time; timer++ {
+		result := (races.Time - timer) * timer
 		if result > races.Distance {
 			winningCombinations++
 			//fmt.Printf("Wiining race distance: (RaceTime %d - Timer %d)*Timer %d = %d \n", raceTime, timer, timer, result)
@@ -54,28 +53,21 @@ func calculateDistance(races Races) {
 
 func parseRaces(input readfile.InputFile) Races {
 	races := Races{}
-	rgx := regexp.MustCompile(`[0-9]+`)
-	tin := rgx.FindAllString(input.InputRow[0], -1)
-	t := ""
-	for _, n := range tin {
-		t = t + n
-	}
-	time, err := strconv.Atoi(t)
-	if err != nil {
-		log.Fatal(err)
-	}
-	races.Time = time
-
-	din := rgx.FindAllString(input.InputRow[1], -1)
-	d := ""
-	for _, n := range din {
-		d = d + n
-	}
-	dist, err := strconv.Atoi(d)
-	if err != nil {
-		log.Fatal(err)
-	}
-	races.Distance = dist
-
+	races.Time = convNumber(input.InputRow[0])
+	races.Distance = convNumber(input.InputRow[1])
 	return races
+}
+
+func convNumber(str string) int {
+	rgx := regexp.MustCompile(`[0-9]+`)
+	numbers := rgx.FindAllString(str, -1)
+	number := ""
+	for _, n := range numbers {
+		number = number + n
+	}
+	num, err := strconv.Atoi(number)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return num
 }
