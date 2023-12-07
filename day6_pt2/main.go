@@ -7,7 +7,6 @@ import (
 	"log"
 	"regexp"
 	"strconv"
-	"sync"
 	"time"
 )
 
@@ -15,8 +14,6 @@ type Races struct {
 	Time     int
 	Distance int
 }
-
-var wg sync.WaitGroup
 
 func main() {
 
