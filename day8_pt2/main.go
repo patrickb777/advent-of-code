@@ -39,42 +39,45 @@ func main() {
 	}
 	fmt.Println(startPositions)
 	position := "AAA"
-	endFlag := 0
 	pedometer := 0
 	threads := 1
 	var wg sync.WaitGroup
 	wg.Add(threads)
-	channel := make(chan int)
+	endFlag := make(chan int)
+	ef := 0
 
 	go func() {
-		defer wg.Done()
+		defer wg.Done() // need to understand why this fixed my deadlock issue
 
-		for t := 0; t <= threads; t++ {
-			for d := 0; d < len(directions); d++ {
-				fmt.Println("Current Position:", position)
-				switch directions[d] {
-				case 76: // left
-					position = navigation[position][0]
-				case 82: // right
-					position = navigation[position][1]
+		for t := 0; t < 1; t++ {
+			for {
+				for d := 0; d < len(directions); d++ {
+					fmt.Printf("Thread %d, current position: %s \n", t, position)
+					switch directions[d] {
+					case 76: // left
+						position = navigation[position][0]
+					case 82: // right
+						position = navigation[position][1]
+					}
+					pedometer++
+					fmt.Printf("Thread %d, moving to position: %s \n", t, position)
+					if position == "ZZZ" {
+						endFlag <- 1
+						ef = 1
+						break
+					}
 				}
-				pedometer++
-				fmt.Println("Moving to:", position)
-				if position == "ZZZ" {
-					channel <- 1
-					endFlag = 1
-				}
-				if endFlag == 1 {
+				if ef == 1 {
 					break
 				}
 			}
 		}
 	}()
-	ef := <-channel
-	fmt.Println(ef)
+	endFlagChan := <-endFlag
+	fmt.Println(endFlagChan)
 
 	wg.Wait()
-	close(channel)
+	close(endFlag)
 
 	fmt.Printf("Total steps taken: %d\n", pedometer)
 
