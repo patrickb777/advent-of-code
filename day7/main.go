@@ -20,10 +20,6 @@ type Hands struct {
 	Strength int
 }
 
-type Rankings struct {
-	Hand []string
-}
-
 func main() {
 	start := time.Now()
 	fmt.Println("[♥]]] [♦]]] [♣]]] [♠]]]")
@@ -37,11 +33,6 @@ func main() {
 
 	// Processing
 
-	// fmt.Printf("Pre-Sort order:\n")
-	// for i := range game.Hand {
-	// 	fmt.Println(game.Hand[i].Hand, game.Hand[i].Strength)
-	// }
-
 	for {
 		sortFlag := 0
 		for i := range game.Hand {
@@ -53,11 +44,9 @@ func main() {
 					game.Hand[i+1] = swap
 					sortFlag = 1
 				} else if game.Hand[i].Strength == game.Hand[i+1].Strength {
-					//log.Println(game.Hand[i].Hand, game.Hand[i].Strength, "<<>>", game.Hand[i+1].Hand, game.Hand[i].Strength)
 					//calculate highest card rule
-					winner := highestCard(game.Hand[i].Hand, game.Hand[i+1].Hand)
-					//log.Println(winner)
-					switch game.Hand[i+1].Hand == winner {
+					loser := highestCard(game.Hand[i].Hand, game.Hand[i+1].Hand)
+					switch game.Hand[i+1].Hand == loser {
 					case true:
 						game.Hand[i] = game.Hand[i+1]
 						game.Hand[i+1] = swap
@@ -71,11 +60,6 @@ func main() {
 			break
 		}
 	}
-
-	// fmt.Printf("Post-Sort order:\n")
-	// for i := range game.Hand {
-	// 	fmt.Println(game.Hand[i].Hand, game.Hand[i].Strength)
-	// }
 
 	total := 0
 	for i := range game.Hand {
@@ -92,7 +76,6 @@ func highestCard(hand1 string, hand2 string) string {
 
 	var loser string
 	for i := 0; i < 5; i++ {
-		//log.Println(cardValues[string(hand1[i])], "<<>>", cardValues[string(hand2[i])])
 		if cardValues[string(hand1[i])] != cardValues[string(hand2[i])] {
 			switch cardValues[string(hand1[i])] < cardValues[string(hand2[i])] {
 			case true:
@@ -155,26 +138,21 @@ func calcStrength(cards string) int {
 		case 4:
 			strength = 6
 		case 3:
-			//log.Println(k, v, "Checking for full house: pais:", p)
 			if p == 1 && v == 3 { // Check for full house
 				strength = 5
-				//log.Println(k, v, "full house found! Strength =", strength)
 			} else {
 				strength = 4
 			}
 		case 2:
-			//log.Println(k, v, "Checking # pairs:", p)
 			if p == 2 {
 				strength = 3
 			} else {
-				if strength <= 2 {
+				if strength <= 2 { // if already evaluated full house don't overwrite value
 					strength = 2
-					//log.Println(k, v, "1 pair assigning st:", strength)
 				}
 			}
 		}
 	}
-	//log.Println(strength)
 	return strength
 }
 
