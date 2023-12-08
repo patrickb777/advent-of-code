@@ -37,7 +37,10 @@ func main() {
 
 	// Processing
 
-	log.Printf("Pre-Sort order:\n %v", game)
+	// fmt.Printf("Pre-Sort order:\n")
+	// for i := range game.Hand {
+	// 	fmt.Println(game.Hand[i].Hand, game.Hand[i].Strength)
+	// }
 
 	for {
 		sortFlag := 0
@@ -50,10 +53,10 @@ func main() {
 					game.Hand[i+1] = swap
 					sortFlag = 1
 				} else if game.Hand[i].Strength == game.Hand[i+1].Strength {
-					log.Println(game.Hand[i].Hand, game.Hand[i].Strength, "<<>>", game.Hand[i+1].Hand, game.Hand[i].Strength)
+					//log.Println(game.Hand[i].Hand, game.Hand[i].Strength, "<<>>", game.Hand[i+1].Hand, game.Hand[i].Strength)
 					//calculate highest card rule
 					winner := highestCard(game.Hand[i].Hand, game.Hand[i+1].Hand)
-					log.Println(winner)
+					//log.Println(winner)
 					switch game.Hand[i+1].Hand == winner {
 					case true:
 						game.Hand[i] = game.Hand[i+1]
@@ -69,11 +72,16 @@ func main() {
 		}
 	}
 
-	log.Printf("Post-Sort order:\n %v", game)
+	// fmt.Printf("Post-Sort order:\n")
+	// for i := range game.Hand {
+	// 	fmt.Println(game.Hand[i].Hand, game.Hand[i].Strength)
+	// }
 
-	// a = append(a[:index+1], a[index:]...)
-
-	//}
+	total := 0
+	for i := range game.Hand {
+		total = total + ((i + 1) * game.Hand[i].Bid)
+	}
+	fmt.Println("Total Winnings:", total)
 	// Output execution time
 	elapsed := time.Since(start)
 	log.Printf("Execution time %s\n", elapsed)
@@ -84,7 +92,7 @@ func highestCard(hand1 string, hand2 string) string {
 
 	var loser string
 	for i := 0; i < 5; i++ {
-		log.Println(cardValues[string(hand1[i])], "<<>>", cardValues[string(hand2[i])])
+		//log.Println(cardValues[string(hand1[i])], "<<>>", cardValues[string(hand2[i])])
 		if cardValues[string(hand1[i])] != cardValues[string(hand2[i])] {
 			switch cardValues[string(hand1[i])] < cardValues[string(hand2[i])] {
 			case true:
@@ -117,7 +125,7 @@ func calcStrength(cards string) int {
 	   Four of a kind :: 6
 	   Full house (three of a kind and 1 pair) :: 5
 	   Three of a kind :: 4
-	   Two two pair :: 3
+	   Two pair :: 3
 	   One pair :: 2
 	   high card :: 1
 	*/
@@ -147,19 +155,26 @@ func calcStrength(cards string) int {
 		case 4:
 			strength = 6
 		case 3:
+			//log.Println(k, v, "Checking for full house: pais:", p)
 			if p == 1 && v == 3 { // Check for full house
 				strength = 5
+				//log.Println(k, v, "full house found! Strength =", strength)
 			} else {
 				strength = 4
 			}
 		case 2:
+			//log.Println(k, v, "Checking # pairs:", p)
 			if p == 2 {
 				strength = 3
 			} else {
-				strength = 2
+				if strength <= 2 {
+					strength = 2
+					//log.Println(k, v, "1 pair assigning st:", strength)
+				}
 			}
 		}
 	}
+	//log.Println(strength)
 	return strength
 }
 
