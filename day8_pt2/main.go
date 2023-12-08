@@ -27,7 +27,7 @@ func main() {
 	pedometer := 0
 	for {
 		for d := 0; d < len(directions); d++ {
-			fmt.Println("Current Position:", position)
+			//fmt.Println("Current Position:", position)
 			switch directions[d] {
 			case 76: // left
 				position = navigation[position][0]
@@ -35,7 +35,7 @@ func main() {
 				position = navigation[position][1]
 			}
 			pedometer++
-			fmt.Println("Moving to:", position)
+			//fmt.Println("Moving to:", position)
 			if position == "ZZZ" {
 				endFlag = 1
 			}
