@@ -22,23 +22,33 @@ func main() {
 	directions, navigation := parseDirections(inputFile)
 
 	// Processing
+	// rune 65 == A
+	// rune 90 == Z
+
+	// What are the possible start positions
+	var startPositions []string
+	var endPositions []string
+	for pos := range navigation {
+		switch pos[2] {
+		case 65:
+			startPositions = append(startPositions, pos)
+		case 90:
+			endPositions = append(endPositions, pos)
+		}
+	}
+
 	position := "AAA"
 	endFlag := 0
 	pedometer := 0
+
 	for {
 		for d := 0; d < len(directions); d++ {
-			//fmt.Println("Current Position:", position)
-			switch directions[d] {
-			case 76: // left
-				position = navigation[position][0]
-			case 82: // right
-				position = navigation[position][1]
-			}
+			position = nextStep(position, navigation, directions[d])
 			pedometer++
-			//fmt.Println("Moving to:", position)
-			if position == "ZZZ" {
-				endFlag = 1
-			}
+		}
+
+		if position == "ZZZ" {
+			endFlag = 1
 		}
 		if endFlag == 1 {
 			break
@@ -47,9 +57,24 @@ func main() {
 
 	fmt.Printf("Total steps taken: %d\n", pedometer)
 
+	fmt.Sprintln(directions, endPositions)
 	// Output execution time
 	elapsed := time.Since(start)
 	log.Printf("Execution time %s\n", elapsed)
+}
+
+func nextStep(position string, navigation map[string][2]string, directions rune) string {
+	fmt.Println("Current Position:", position)
+	switch directions {
+	case 76: // left
+		position = navigation[position][0]
+	case 82: // right
+		position = navigation[position][1]
+
+	}
+	fmt.Println("Moving to:", position)
+	//fmt.Println("Moving to:", position)
+	return position
 }
 
 func parseDirections(input readfile.InputFile) ([]rune, map[string][2]string) {
