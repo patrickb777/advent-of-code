@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"log"
 	"regexp"
-	"slices"
 	"strconv"
 	"strings"
 	"time"
@@ -14,10 +13,6 @@ import (
 
 type Seeds struct {
 	Seeds []int
-}
-
-type Locations struct {
-	Loc []int
 }
 
 type Maps struct {
@@ -38,38 +33,37 @@ func main() {
 	inputFile := readfile.ReadFile(*f)
 
 	// Processing
-	locations := Locations{}
+	loc := 0
+	lowestLoc := 0
 	seeds, maps := parseAlmanac(inputFile)
-	for _, s := range seeds.Seeds {
-		locations.Loc = append(locations.Loc, getLocation(s, maps))
+	for i, s := range seeds.Seeds {
+		loc = getLocation(s, maps)
+		//fmt.Println("Returned location:", loc)
+		if i == 0 {
+			lowestLoc = loc
+		} else if loc < lowestLoc {
+			lowestLoc = loc
+		}
 	}
-	//fmt.Println(locations)
-	loc := getNearestLoc(locations.Loc)
-	fmt.Println("Closet location: ", loc)
+	fmt.Printf("Lowest location: %d \n", lowestLoc)
+	// //fmt.Println(locations)
+	// fmt.Println("Closet location: ", loc)
 
 	// Output execution time
 	elapsed := time.Since(start)
 	log.Printf("Execution time %s\n", elapsed)
-}
-
-func getNearestLoc(locs []int) int {
-	loc := slices.Min(locs)
-	return loc
+	fmt.Sprintln(seeds, maps)
 }
 
 func getLocation(seed int, maps Maps) int {
 	loc := 0
-	//log.Printf("Seed: %d", seed)
 	soil := mapLookup(seed, "seed-to-soil", maps)
-	//log.Printf("Soil: %d", soil)
 	fert := mapLookup(soil, "soil-to-fertilizer", maps)
-	//log.Printf("Fertilizer: %d", fert)
 	water := mapLookup(fert, "fertilizer-to-water", maps)
 	light := mapLookup(water, "water-to-light", maps)
 	temp := mapLookup(light, "light-to-temperature", maps)
 	humi := mapLookup(temp, "temperature-to-humidity", maps)
 	loc = mapLookup(humi, "humidity-to-location", maps)
-	//log.Printf("Location: %d\n\n", loc)
 	//log.Println(seed, soil, fert, water, light, temp, humi, loc)
 	return loc
 }
