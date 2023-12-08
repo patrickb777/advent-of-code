@@ -49,7 +49,7 @@ func main() {
 	go func() {
 		defer wg.Done() // need to understand why this fixed my deadlock issue
 
-		for t := 0; t < 1; t++ {
+		for t := 0; t < len(startPositions); t++ {
 			for {
 				for d := 0; d < len(directions); d++ {
 					fmt.Printf("Thread %d, current position: %s \n", t, position)
