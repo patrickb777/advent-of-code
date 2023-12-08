@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -36,45 +37,51 @@ func main() {
 			endPositions = append(endPositions, pos)
 		}
 	}
-
+	fmt.Println(startPositions)
 	position := "AAA"
 	endFlag := 0
 	pedometer := 0
+	threads := 1
+	var wg sync.WaitGroup
+	wg.Add(threads)
+	channel := make(chan int)
 
-	for {
-		for d := 0; d < len(directions); d++ {
-			position = nextStep(position, navigation, directions[d])
-			pedometer++
-		}
+	go func() {
+		defer wg.Done()
 
-		if position == "ZZZ" {
-			endFlag = 1
+		for t := 0; t <= threads; t++ {
+			for d := 0; d < len(directions); d++ {
+				fmt.Println("Current Position:", position)
+				switch directions[d] {
+				case 76: // left
+					position = navigation[position][0]
+				case 82: // right
+					position = navigation[position][1]
+				}
+				pedometer++
+				fmt.Println("Moving to:", position)
+				if position == "ZZZ" {
+					channel <- 1
+					endFlag = 1
+				}
+				if endFlag == 1 {
+					break
+				}
+			}
 		}
-		if endFlag == 1 {
-			break
-		}
-	}
+	}()
+	ef := <-channel
+	fmt.Println(ef)
+
+	wg.Wait()
+	close(channel)
 
 	fmt.Printf("Total steps taken: %d\n", pedometer)
 
-	fmt.Sprintln(directions, endPositions)
+	//fmt.Sprintln(directions, endPositions)
 	// Output execution time
 	elapsed := time.Since(start)
 	log.Printf("Execution time %s\n", elapsed)
-}
-
-func nextStep(position string, navigation map[string][2]string, directions rune) string {
-	fmt.Println("Current Position:", position)
-	switch directions {
-	case 76: // left
-		position = navigation[position][0]
-	case 82: // right
-		position = navigation[position][1]
-
-	}
-	fmt.Println("Moving to:", position)
-	//fmt.Println("Moving to:", position)
-	return position
 }
 
 func parseDirections(input readfile.InputFile) ([]rune, map[string][2]string) {
