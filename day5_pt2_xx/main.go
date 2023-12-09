@@ -22,6 +22,8 @@ type Mapdata struct {
 }
 
 func main() {
+
+	// Init
 	start := time.Now()
 	fmt.Println("The Gardener & The Almanac")
 	f := flag.String("f", "none", "Input file")
@@ -34,14 +36,32 @@ func main() {
 	loc := 0
 	lowestLoc := 0
 	seeds, maps = parseAlmanac(inputFile)
-	c := 0
-	p := 0
+	totalSeeds := 0
+	// calculate total number of seeds
 	for s := 0; s < len(seeds); s++ {
 		rangeStart := seeds[s]
-		rangeEnd := seeds[s] + (seeds[s+1] - 1)
-		fmt.Println(seeds[s], rangeStart, rangeEnd)
-		for i := rangeStart; i <= rangeEnd; i++ {
-			loc = getLocation(i, maps)
+		rangeEnd := seeds[s] + (seeds[s+1])
+		totalSeeds = totalSeeds + (rangeEnd - rangeStart)
+		s++
+	}
+	log.Println("Total number of seeds: ", totalSeeds)
+	c := 0
+	p := 0
+	//var pct float32
+	for s := 0; s < len(seeds); s++ {
+		rangeStart := seeds[s]
+		rangeEnd := seeds[s] + (seeds[s+1])
+		//fmt.Println(seeds[s], rangeStart, rangeEnd)
+		for seed := rangeStart; seed <= rangeEnd; seed++ {
+			//loc = getLocation(i, maps)
+			soil := mapLookup(seed, "seed-to-soil", maps)
+			fert := mapLookup(soil, "soil-to-fertilizer", maps)
+			water := mapLookup(fert, "fertilizer-to-water", maps)
+			light := mapLookup(water, "water-to-light", maps)
+			temp := mapLookup(light, "light-to-temperature", maps)
+			humi := mapLookup(temp, "temperature-to-humidity", maps)
+			loc = mapLookup(humi, "humidity-to-location", maps)
+
 			//fmt.Println("Returned location:", loc)
 			if p == 0 {
 				lowestLoc = loc
@@ -51,10 +71,11 @@ func main() {
 			c++
 			p++
 			s++
-			if c == 1000000 {
-				log.Printf("Processed %d seeds", p)
-				c = 0
-			}
+			// if c == 10000000 {
+			// 	pct = (float32(p) / float32(totalSeeds))
+			// 	log.Printf("Processed %d seeds, %f %% of total", p, pct)
+			// 	c = 0
+			// }
 		}
 	}
 	fmt.Printf("Lowest location: %d \n", lowestLoc)

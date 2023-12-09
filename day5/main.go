@@ -46,8 +46,6 @@ func main() {
 		}
 	}
 	fmt.Printf("Lowest location: %d \n", lowestLoc)
-	// //fmt.Println(locations)
-	// fmt.Println("Closet location: ", loc)
 
 	// Output execution time
 	elapsed := time.Since(start)
