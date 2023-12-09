@@ -16,9 +16,9 @@ type Maps struct {
 }
 type Mapdata struct {
 	Map    string
-	Dest   int
-	Source int
-	Range  int
+	Dest   int64
+	Source int64
+	Range  int64
 }
 
 func main() {
@@ -31,28 +31,34 @@ func main() {
 	inputFile := readfile.ReadFile(*f)
 
 	// Processing
-	var seeds []int
+	var seeds []int64
+	var loc int64
+	var lowestLoc int64
 	var maps Maps
-	loc := 0
-	lowestLoc := 0
+	loc = 0
+	lowestLoc = 0
 	seeds, maps = parseAlmanac(inputFile)
 	totalSeeds := 0
 	// calculate total number of seeds
-	for s := 0; s < len(seeds); s++ {
-		rangeStart := seeds[s]
-		rangeEnd := seeds[s] + (seeds[s+1])
-		totalSeeds = totalSeeds + (rangeEnd - rangeStart)
-		s++
-	}
+	// for s := 0; s < len(seeds); s++ {
+	// 	rangeStart := seeds[s]
+	// 	rangeEnd := seeds[s] + (seeds[s+1] - 1)
+	// 	for seed := rangeStart; seed < rangeEnd; seed++ {
+	// 		fmt.Println(seed)
+	// 	}
+	// 	fmt.Printf("Seed: %d | Range Start: %d | Range End: %d\n ", seeds[s], rangeStart, rangeEnd)
+	// 	s++
+	// }
+
 	log.Println("Total number of seeds: ", totalSeeds)
 	c := 0
 	p := 0
 	//var pct float32
 	for s := 0; s < len(seeds); s++ {
 		rangeStart := seeds[s]
-		rangeEnd := seeds[s] + (seeds[s+1])
-		//fmt.Println(seeds[s], rangeStart, rangeEnd)
-		for seed := rangeStart; seed <= rangeEnd; seed++ {
+		rangeEnd := seeds[s] + (seeds[s+1] - 1)
+		fmt.Println(seeds[s], rangeStart, rangeEnd)
+		for seed := rangeStart; seed < rangeEnd; seed++ {
 			//loc = getLocation(i, maps)
 			soil := mapLookup(seed, "seed-to-soil", maps)
 			fert := mapLookup(soil, "soil-to-fertilizer", maps)
@@ -86,8 +92,9 @@ func main() {
 	fmt.Sprintln(seeds, maps)
 }
 
-func getLocation(seed int, maps Maps) int {
-	loc := 0
+func getLocation(seed int64, maps Maps) int64 {
+	var loc int64
+	loc = 0
 	soil := mapLookup(seed, "seed-to-soil", maps)
 	fert := mapLookup(soil, "soil-to-fertilizer", maps)
 	water := mapLookup(fert, "fertilizer-to-water", maps)
@@ -99,8 +106,9 @@ func getLocation(seed int, maps Maps) int {
 	return loc
 }
 
-func mapLookup(source int, m string, maps Maps) int {
-	dest := 404
+func mapLookup(source int64, m string, maps Maps) int64 {
+	var dest int64
+	dest = 404
 	for _, md := range maps.Mapdata {
 		switch md.Map {
 		case m:
@@ -118,8 +126,8 @@ func mapLookup(source int, m string, maps Maps) int {
 	return dest
 }
 
-func parseAlmanac(almanac readfile.InputFile) ([]int, Maps) {
-	var seeds []int
+func parseAlmanac(almanac readfile.InputFile) ([]int64, Maps) {
+	var seeds []int64
 	var maps Maps
 	var md Mapdata
 	rgx := regexp.MustCompile(`[0-9]+`)
@@ -159,15 +167,15 @@ func parseAlmanac(almanac readfile.InputFile) ([]int, Maps) {
 	return seeds, maps
 }
 
-func convNumbers(str []string) []int {
-	var numList []int
+func convNumbers(str []string) []int64 {
+	var numList []int64
 	for _, v := range str {
 		num, err := strconv.Atoi(v)
 		if err != nil {
 			log.Print(err)
 			return numList
 		}
-		numList = append(numList, num)
+		numList = append(numList, int64(num))
 	}
 	return numList
 }

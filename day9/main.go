@@ -11,7 +11,7 @@ import (
 func main() {
 	// Init
 	start := time.Now()
-	fmt.Println("")
+	fmt.Println("mirage maintenance")
 	f := flag.String("f", "none", "Input file")
 	flag.Parse()
 

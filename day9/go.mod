@@ -1,4 +1,4 @@
-module advent-of-code/tbc
+module advent-of-code/miragemaintenance
 
 go 1.21.4
 

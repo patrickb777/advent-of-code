@@ -7,7 +7,7 @@ import (
 
 // Validate input file can be opened
 func TestReadfile(t *testing.T) {
-	expectedResult := 9
+	expectedResult := 3
 	inputFile := readfile.ReadFile("input_test_1.txt")
 	result := len(inputFile.InputRow)
 	if result != expectedResult {

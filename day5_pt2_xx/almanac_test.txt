@@ -31,3 +31,19 @@ temperature-to-humidity map:
 humidity-to-location map:
 60 56 37
 56 93 4
+
+
+79 1
+802
+813
+824
+835
+846
+857
+868
+879
+88
+8910
+9011
+912
+9214
