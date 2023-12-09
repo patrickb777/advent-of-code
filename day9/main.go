@@ -31,7 +31,7 @@ func main() {
 		forecast = forecast + analyseData(row)
 		cnt++
 	}
-	fmt.Println(forecast, cnt)
+	fmt.Printf("\nResult: %d.  Data Points Forecased: %d\n", forecast, cnt)
 	// Output execution time
 	elapsed := time.Since(start)
 	log.Printf("Execution time %s\n", elapsed)
@@ -49,11 +49,14 @@ func analyseData(data []int64) int64 {
 			tmp = append(tmp, forecast[i][x+1]-forecast[i][x])
 		}
 		forecast = append(forecast, tmp)
-		subTot := int64(0)
+		zeroCnt := 0
+		target := len(forecast[i])
 		for _, x := range forecast[i] {
-			subTot = subTot + x
+			if x == 0 {
+				zeroCnt++
+			}
 		}
-		if subTot == 0 {
+		if target == zeroCnt {
 			break
 		}
 	}
