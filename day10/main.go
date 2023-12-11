@@ -11,7 +11,7 @@ import (
 func main() {
 	// Init
 	start := time.Now()
-	fmt.Println("mirage maintenance")
+	fmt.Println("Pipe Maze")
 	f := flag.String("f", "none", "Input file")
 	flag.Parse()
 
