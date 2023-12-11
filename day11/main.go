@@ -5,8 +5,20 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"math"
 	"time"
 )
+
+type Galaxy struct {
+	Id     int
+	Xcoord int
+	Ycoord int
+}
+type Distance struct {
+	Source      int
+	Destination int
+	Distance    float64
+}
 
 func main() {
 	// Init
@@ -43,13 +55,17 @@ func main() {
 		}
 	}
 	// Expand the Universe on X Axis
+	galaxies := []Galaxy{}
+	id := 0
 	for x := 0; x < len(universe[0]); x++ {
 		expandX := true
 		for y := 0; y < len(universe); y++ {
+
 			//fmt.Println("\n", x, " = ", universe[y][x], " | ", expand)
 			if universe[y][x] == 35 {
 				expandX = false
-				break
+				galaxies = append(galaxies, Galaxy{Id: id, Xcoord: x, Ycoord: y})
+				id++
 			}
 		}
 		if expandX {
@@ -61,11 +77,28 @@ func main() {
 			x++
 		}
 	}
-
 	fmt.Println("Expanded universe:")
 	for i := range universe {
 		fmt.Println(universe[i])
 	}
+	fmt.Println(galaxies)
+
+	// Calculate distances
+	distances := []Distance{}
+	totalDistance := 0
+	for _, srcGal := range galaxies {
+		//d := Distance{}
+		for destGal := srcGal.Id; destGal < len(galaxies); destGal++ {
+			if srcGal.Id != destGal {
+				stepsY := math.Abs(float64(galaxies[destGal].Ycoord - srcGal.Ycoord))
+				stepsX := math.Abs(float64(galaxies[destGal].Xcoord - srcGal.Xcoord))
+				distances = append(distances, Distance{Source: srcGal.Id, Destination: destGal, Distance: stepsY + stepsX})
+				totalDistance = totalDistance + int(stepsX+stepsY)
+			}
+
+		}
+	}
+	fmt.Println(totalDistance, distances)
 
 	// Output execution time
 	elapsed := time.Since(start)
