@@ -36,58 +36,87 @@ func main() {
 	// }
 
 	// Processing
-	//
-	// Expand the Universe on Y Axis
-	for y := 0; y < len(universe); y++ {
-		expandY := true
-		for x := 0; x < len(universe[y]); x++ {
-			//fmt.Println("\n", x, " = ", universe[y][x], " | ", expand)
-			if universe[y][x] == 35 {
-				expandY = false
-				break
-			}
-		}
-		if expandY {
-			//log.Printf("Found no universe in row %d", y)
-			universe = append(universe[:y+1], universe[y:]...)
-			universe[y] = universe[y+1]
-			y++
-		}
-	}
-	// Expand the Universe on X Axis
+
+	//Find Galaxies
 	galaxies := []Galaxy{}
 	id := 0
-	for x := 0; x < len(universe[0]); x++ {
-		expandX := true
-		for y := 0; y < len(universe); y++ {
-
-			//fmt.Println("\n", x, " = ", universe[y][x], " | ", expand)
+	yExpPoints := []int{}
+	for y := range universe {
+		yExpansion := true
+		for x := range universe {
 			if universe[y][x] == 35 {
-				expandX = false
+				//fmt.Println("Found Galaxy @", x, y)
 				galaxies = append(galaxies, Galaxy{Id: id, Xcoord: x, Ycoord: y})
 				id++
+				yExpansion = false
 			}
 		}
-		if expandX {
-			//log.Printf("Found no universe on X axis %d", x)
-			for y := 0; y < len(universe); y++ {
-				universe[y] = append(universe[y][:x+1], universe[y][x:]...)
-				universe[y][x] = universe[y][x+1]
-			}
-			x++
+		if yExpansion == true {
+			yExpPoints = append(yExpPoints, y)
 		}
 	}
-	//fmt.Println("Expanded universe:")
-	// for i := range universe {
-	// 	fmt.Println(universe[i])
-	// }
 	//fmt.Println(galaxies)
 
-	// Calculate distances
+	xExpPoints := []int{}
+	for x := range universe {
+		xExpansion := true
+		for y := range universe {
+			if universe[y][x] == 35 {
+				xExpansion = false
+			}
+		}
+		if xExpansion == true {
+			xExpPoints = append(xExpPoints, x)
+		}
+	}
+	//fmt.Println(xExpPoints)
+	//fmt.Println(yExpPoints)
+
+	//Shift Galaxy Positions
+	shift := 1
+	// X Axis
+	for g, gal := range galaxies {
+		cnt := 1
+		adjXcoord := 0
+		shiftFlag := 0
+		for _, ep := range xExpPoints {
+			if gal.Xcoord > ep {
+				//fmt.Printf("Galaxy: %d, X: %d, Exp Point: %d \n", gal.Id, gal.Xcoord, ep)
+				adjXcoord = gal.Xcoord + (shift * cnt)
+				//fmt.Printf("Galaxy: %d, X: %d, adjusted X: %d \n", gal.Id, gal.Xcoord, adjXcoord)
+				cnt++
+				shiftFlag = 1
+			}
+		}
+		if shiftFlag == 1 {
+			galaxies[g].Xcoord = adjXcoord
+		}
+	}
+	//fmt.Println(galaxies)
+	// Y Axis
+	for g, gal := range galaxies {
+		cnt := 1
+		adjYcoord := 0
+		shiftFlag := 0
+		for _, ep := range yExpPoints {
+			if gal.Ycoord > ep {
+				//fmt.Printf("Galaxy: %d, Y: %d, Exp Point: %d \n", gal.Id, gal.Ycoord, ep)
+				adjYcoord = gal.Ycoord + (shift * cnt)
+				//fmt.Printf("Galaxy: %d, Y: %d, adjusted Y: %d \n", gal.Id, gal.Ycoord, adjYcoord)
+				cnt++
+				shiftFlag = 1
+			}
+		}
+		if shiftFlag == 1 {
+			galaxies[g].Ycoord = adjYcoord
+		}
+	}
+	//fmt.Println(galaxies)
+
+	//Calculate distances
 	distances := []Distance{}
 	totalDistance := 0
 	for _, srcGal := range galaxies {
-		//d := Distance{}
 		for destGal := srcGal.Id; destGal < len(galaxies); destGal++ {
 			if srcGal.Id != destGal {
 				stepsY := math.Abs(float64(galaxies[destGal].Ycoord - srcGal.Ycoord))
